@@ -12,11 +12,11 @@ namespace my_union_find{
     class Element{
         public:
             const T _data;
-            Element<T>* _perent;
+            Element<T>* _parent;
             Group<T>* _group;
 
-            Element(const T data): _data(data), _perent(nullptr), Group<T>*(nullptr){}
-            Element() : _data(), _perent(nullptr), _group(nullptr){} 
+            Element(const T data): _data(data), _parent(nullptr), Group<T>*(nullptr){}
+            Element() : _data(), _parent(nullptr), _group(nullptr){} 
             virtual ~Element = default;
     };
     
@@ -29,7 +29,7 @@ namespace my_union_find{
             Group(Element<T>* root): _root(root), _size(1) {}
             Group(): _root(nullptr), _size(0) {}
             Add(Element<T>& new_element){
-                new_element._perent = this->_root;
+                new_element._parent = this->_root;
                 _size++;
             }
             virtual ~Group = default;
@@ -46,22 +46,22 @@ namespace my_union_find{
                 for (auto i : data){
                     _elements.push_back(i);
                     _groups.push_back(*(_elements.back));
-                    _elements.back._perent = *(_groups.back);
+                    _elements.back._parent = *(_groups.back);
                 }
             }
             virtual ~UnionFind = default;
 
             Group<T>& Find(int loc) const {
                 Element<T>* root = &_elements.at(loc);
-                while(root->_perent != nullptr)
+                while(root->_parent != nullptr)
                 {
-                    root = root->_perent;
+                    root = root->_parent;
                 }
-                //sets the perents for all the elements in the rout
+                //sets the parents for all the elements in the rout
                 Element<T>* element_ptr = &_elements.at(loc);
                 while (element_ptr != root)
                 {
-                    element_ptr->_perent = root;
+                    element_ptr->_parent = root;
                 }
                 
                 return *(root->_group);
@@ -73,12 +73,12 @@ namespace my_union_find{
                 }
                 if(group1._size <= group2._size)
                 {
-                    group2._root->_perent = group1._root;
+                    group2._root->_parent = group1._root;
                     group1._size += gruop2._size;
                     return group1;
                 }
                 else{
-                    group1._root->_perent = group2._root;
+                    group1._root->_parent = group2._root;
                     group2._size += gruop1._size;
                     return group2;
                 }
