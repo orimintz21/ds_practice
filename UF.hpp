@@ -3,8 +3,9 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-
-namespace my_union_find{
+#include <exception>
+// namespace my_union_find{
+    using std::vector;
     template<class T>
     class Group;
 
@@ -15,9 +16,8 @@ namespace my_union_find{
             Element<T>* _parent;
             Group<T>* _group;
 
-            Element(const T data): _data(data), _parent(nullptr), Group<T>*(nullptr){}
+            Element(const T data): _data(data), _parent(nullptr), _group(nullptr) {}
             Element() : _data(), _parent(nullptr), _group(nullptr){} 
-            virtual ~Element = default;
     };
     
     template<class T>
@@ -28,28 +28,25 @@ namespace my_union_find{
 
             Group(Element<T>* root): _root(root), _size(1) {}
             Group(): _root(nullptr), _size(0) {}
-            Add(Element<T>& new_element){
+            void Add(Element<T>& new_element){
                 new_element._parent = this->_root;
                 _size++;
             }
-            virtual ~Group = default;
-
     };
 
     template<class T>
     class UnionFind {
         public:
-            vector<Group<T>> _groups();
-            vector<Element<T>> _elements();
+            vector<Group<T>> _groups;
+            vector<Element<T>> _elements;
 
             UnionFind(const vector<T> data){
                 for (auto i : data){
                     _elements.push_back(i);
-                    _groups.push_back(*(_elements.back));
-                    _elements.back._parent = *(_groups.back);
+                    _groups.push_back(&(_elements.back()));
+                    _elements.back()._group = &(_groups.back());
                 }
             }
-            virtual ~UnionFind = default;
 
             Group<T>& Find(int loc) const {
                 Element<T>* root = &_elements.at(loc);
@@ -58,7 +55,7 @@ namespace my_union_find{
                     root = root->_parent;
                 }
                 //sets the parents for all the elements in the rout
-                Element<T>* element_ptr = &_elements.at(loc);
+                Element<T>* element_ptr = & (_elements.at(loc));
                 while (element_ptr != root)
                 {
                     element_ptr->_parent = root;
@@ -68,18 +65,18 @@ namespace my_union_find{
             }
 
             Group<T>& Union(Group<T>& group1, Group<T>& group2){
-                if(&group1 == &gruop2){
+                if(&group1 == & group2){
                     throw std::invalid_argument();
                 }
                 if(group1._size <= group2._size)
                 {
                     group2._root->_parent = group1._root;
-                    group1._size += gruop2._size;
+                    group1._size += group2._size;
                     return group1;
                 }
                 else{
                     group1._root->_parent = group2._root;
-                    group2._size += gruop1._size;
+                    group2._size += group1._size;
                     return group2;
                 }
             }
@@ -88,7 +85,7 @@ namespace my_union_find{
                 return Union(Find(loc1), Find(loc2));
             }
     };
-}
+// }
     
 
 

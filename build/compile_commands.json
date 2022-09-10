@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/orimintz21/ds/ds_pructice/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/DS.dir/test.cpp.o -c /home/orimintz21/ds/ds_pructice/test.cpp",
+  "file": "/home/orimintz21/ds/ds_pructice/test.cpp"
+}
+]

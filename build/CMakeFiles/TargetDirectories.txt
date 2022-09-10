@@ -1,0 +1,3 @@
+/home/orimintz21/ds/ds_pructice/build/CMakeFiles/DS.dir
+/home/orimintz21/ds/ds_pructice/build/CMakeFiles/edit_cache.dir
+/home/orimintz21/ds/ds_pructice/build/CMakeFiles/rebuild_cache.dir

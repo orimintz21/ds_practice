@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/DS.dir/test.cpp.o -o DS 
