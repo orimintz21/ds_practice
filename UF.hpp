@@ -5,28 +5,33 @@
 #include <memory>
 
 namespace my_union_find{
-    using std::shared_ptr;
     template<class T>
     class Group;
 
     template<class T>
     class Element{
         public:
-            shared_ptr<T> _data;
-            Element* _perent;
-            Group* _group;
+            const T _data;
+            Element<T>* _perent;
+            Group<T>* _group;
 
-            Element(shared_ptr<T> data, Group* group): _data(data), _perent(nullptr), Group*(group){}
+            Element(const T data): _data(data), _perent(nullptr), Group<T>*(nullptr){}
+            Element() : _data(), _perent(nullptr), _group(nullptr){} 
             virtual ~Element = default;
     };
     
     template<class T>
     class Group{
         public:
-            Element* _root;
+            Element<T>* _root;
             int _size;
 
-            Group(Element* root): _root(root), _size(1) {}
+            Group(Element<T>* root): _root(root), _size(1) {}
+            Group(): _root(nullptr), _size(0) {}
+            Add(Element<T>& new_element){
+                new_element._perent = this->_root;
+                _size++;
+            }
             virtual ~Group = default;
 
     };
@@ -34,8 +39,54 @@ namespace my_union_find{
     template<class T>
     class UnionFind {
         public:
-            vector<T> groups();
-            vector<T> elements();
+            vector<Group<T>> _groups();
+            vector<Element<T>> _elements();
+
+            UnionFind(const vector<T> data){
+                for (auto i : data){
+                    _elements.push_back(i);
+                    _groups.push_back(*(_elements.back));
+                    _elements.back._perent = *(_groups.back);
+                }
+            }
+            virtual ~UnionFind = default;
+
+            Group<T>& Find(int loc) const {
+                Element<T>* root = &_elements.at(loc);
+                while(root->_perent != nullptr)
+                {
+                    root = root->_perent;
+                }
+                //sets the perents for all the elements in the rout
+                Element<T>* element_ptr = &_elements.at(loc);
+                while (element_ptr != root)
+                {
+                    element_ptr->_perent = root;
+                }
+                
+                return *(root->_group);
+            }
+
+            Group<T>& Union(Group<T>& group1, Group<T>& group2){
+                if(&group1 == &gruop2){
+                    throw std::invalid_argument();
+                }
+                if(group1._size <= group2._size)
+                {
+                    group2._root->_perent = group1._root;
+                    group1._size += gruop2._size;
+                    return group1;
+                }
+                else{
+                    group1._root->_perent = group2._root;
+                    group2._size += gruop1._size;
+                    return group2;
+                }
+            }
+
+            Group<T>& Union(int loc1, int loc2){
+                return Union(Find(loc1), Find(loc2));
+            }
     };
 }
     
